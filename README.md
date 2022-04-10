@@ -1,5 +1,6 @@
 **My Pytorch implementation of BERT.**
 
+![Single Layer Architecture of MyBeRT](https://github.com/thisisanshgupta/pytorch_BERT/blob/main/BERT-Pytorch.png)
 Some resources that helped me:
 
 
