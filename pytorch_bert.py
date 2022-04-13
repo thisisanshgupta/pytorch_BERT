@@ -1,4 +1,4 @@
-"""#[BERT](https://arxiv.org/abs/1810.04805)
+"""[BERT](https://arxiv.org/abs/1810.04805)
 
 BERT(Bidirectional Encoder Representations from Transformers) has the following components:
 
@@ -22,7 +22,7 @@ import torch.optim as optim
 
 print("MODULES LOADED")
 
-"""#Embedding Layer
+"""Embedding Layer
 
 The embedding is the first layer in BERT that takes the input and creates a lookup table. The parameters of the embedding layers are learnable, which means when the learning process is over the embeddings will cluster similar words together. 
 
@@ -51,7 +51,7 @@ class EmbeddingLayer(nn.Module):
       embedding = self.token_embedding(x) + self.position_embedding(pos) + self.segment_embedding(seg)
       return self.norm(embedding)
 
-"""#Attention Mask
+"""Attention Mask
 Attention masks allow us to send a batch into the transformer even when the examples in the batch have varying lengths.
 
 eg:
@@ -66,7 +66,7 @@ def get_attention_pad_mask(seq_q,seq_k):
     pad_attn_mask = seq_k.data.eq(0).unsqueeze(1)  # batch_size x 1 x len_k(=len_q), one is masking
     return pad_attn_mask.expand(batch_size, len_q, len_k)  # batch_size x len_q x len_k
 
-"""#Encoder Layer
+"""Encoder Layer
 The encoder has two main components: 
 
 1. Multi-head Attention
@@ -86,7 +86,7 @@ class EncoderLayer(nn.Module):
       enc_outputs = self.pos_ffn(enc_outputs) # enc_outputs: [batch_size x len_q x d_model]
       return enc_outputs, attn
 
-"""#Multi Head Attention
+"""Multi Head Attention
 
 This is the first of the main components of the encoder. 
 
@@ -121,7 +121,7 @@ class MultiHeadAttention(nn.Module):
 
       return nn.LayerNorm(d_model)(output + residual), attn # output: [batch_size x len_q x d_model]
 
-"""#Scaled Dot Product Attention
+"""Scaled Dot Product Attention
 The scaled dot product attention class takes four arguments: Query, Key, Value, and Attention mask. Essentially, the first three arguments are fed with the word embeddings and the attention mask argument is fed with attention mask embeddings.
 Then it does a matrix multiplication between query and key to get scores. 
 Following that we use scores.masked_fill_(attn_mask, -1e9) . This attribute fills the element of scores with -1e9 where the attention masks are True while the rest of the elements get an attention score which is then passed through a softmax function that gives a score between 0 and 1. Finally, we perform a matrix multiplication between attention and values which gives us the context vectors.
@@ -138,7 +138,7 @@ class ScaledDotProductAttention(nn.Module):
        context = torch.matmul(attn, V)
        return score, context, attn
 
-"""#Position Wise Feed-Forward Layer"""
+"""Position Wise Feed-Forward Layer"""
 
 class PositionWiseFeedForward(nn.Module):
     def __init__(self):
@@ -150,13 +150,13 @@ class PositionWiseFeedForward(nn.Module):
         # (batch_size, len_seq, d_model) -> (batch_size, len_seq, d_ff) -> (batch_size, len_seq, d_model)
         return self.fc2(gelu(self.fc1(x)))
 
-"""#GeLU Activation"""
+"""GeLU Activation"""
 
 def gelu(x):
     "Implementation of the GeLU activation function"
     return x * 0.5 * (1.0 + torch.erf(x / math.sqrt(2.0)))
 
-"""# Making Batches"""
+"""Making Batches"""
 
 def make_batch():
     batch = []
@@ -201,7 +201,7 @@ def make_batch():
             negative += 1
     return batch
 
-"""#Model Class"""
+"""Model Class"""
 
 class BERT(nn.Module):
    def __init__(self):
@@ -274,9 +274,7 @@ if __name__ == '__main__':
 
     model = BERT()
 
-model
-
-"""#Training"""
+"""Training"""
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -311,18 +309,3 @@ print('isNext : ', True if isNext else False)
 
 print('isNext : ', True if isNext else False)
 print('predict isNext : ',True if logits_clsf else False)
-
-
-
-"""#Bert Base Uncased"""
-
-!pip install transformers
-
-from transformers import AutoTokenizer, AutoModelForMaskedLM
-
-tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-
-model = AutoModelForMaskedLM.from_pretrained("bert-base-uncased")
-
-model
-
