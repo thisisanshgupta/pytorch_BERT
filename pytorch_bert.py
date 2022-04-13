@@ -23,15 +23,10 @@ import torch.optim as optim
 print("MODULES LOADED")
 
 """Embedding Layer
-
 The embedding is the first layer in BERT that takes the input and creates a lookup table. The parameters of the embedding layers are learnable, which means when the learning process is over the embeddings will cluster similar words together. 
-
 The embedding layer also preserves different relationships between words such as: semantic, syntactic, linear, and since BERT is bidirectional it will also preserve contextual relationships as well. 
-
 In the case of BERT, it creates three embeddings for 
-
 Token,Position and Segments.
-
 If you recall we haven’t created a function that takes the input and formats it for position embedding but the formatting for token and segments are completed. So we will take the input and create a position for each word in the sequence
 """
 
@@ -53,10 +48,8 @@ class EmbeddingLayer(nn.Module):
 
 """Attention Mask
 Attention masks allow us to send a batch into the transformer even when the examples in the batch have varying lengths.
-
 eg:
 [CLS] The cat is walking [PAD] [PAD] [PAD]. [CLS] The dog is barking at the tree.
-
 The length of the first sentence is equal to the length of the second sentence.
 """
 
@@ -68,10 +61,8 @@ def get_attention_pad_mask(seq_q,seq_k):
 
 """Encoder Layer
 The encoder has two main components: 
-
 1. Multi-head Attention
 2. Position-wise feed-forward network.
- 
 The work of the encoder is to find representations and patterns from the input and attention mask.
 """
 
@@ -87,11 +78,8 @@ class EncoderLayer(nn.Module):
       return enc_outputs, attn
 
 """Multi Head Attention
-
 This is the first of the main components of the encoder. 
-
 The attention model takes three inputs: Query, Key, and Value.  
-
 Multihead attention takes four inputs: Query, Key, Value, and Attention mask. The embeddings are fed as input to the Query, Key, and Value argument, and the attention mask is fed as input to the attention mask argument. 
 These three inputs and the attention mask are operated with a dot product operation that yields two outputs: context vectors and attention. The context vector is then passed through a linear layer and finally that yields the output.
 """
