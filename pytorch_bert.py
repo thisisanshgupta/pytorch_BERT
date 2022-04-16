@@ -1,6 +1,4 @@
-"""[BERT](https://arxiv.org/abs/1810.04805)
-
-BERT(Bidirectional Encoder Representations from Transformers) has the following components:
+"""BERT(Bidirectional Encoder Representations from Transformers) has the following components:
 
 1. Embedding layers
 2. Attention Mask
